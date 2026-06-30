@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireless Energy Toolkit v1.0 - 3D Interactive</title>
+<style>
+:root{--bg:#000008;--fg:#e0f0ff;--cyan:#00e8ff;--gold:#ffcc00;--purple:#b040ff;--green:#00ff80;--dim:#182030;}
+*{box-sizing:border-box;font-family:'Courier New',monospace;margin:0;padding:0;}
+body{background:var(--bg);color:var(--fg);overflow:hidden;}
+#canvas{width:100vw;height:100vh;display:block;}
+.ui{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;}
+.panel{position:absolute;background:rgba(0,8,20,0.92);border:1px solid var(--cyan);border-radius:10px;padding:16px;box-shadow:0 0 30px rgba(0,232,255,0.2);backdrop-filter:blur(12px);pointer-events:all;}
+.panel h2{color:var(--gold);font-size:13px;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px;text-shadow:0 0 10px var(--gold);}
+.panel.top-left{top:20px;left:20px;width:320px;}
+.panel.top-right{top:20px;right:20px;width:300px;}
+.panel.bottom-left{bottom:20px;left:20px;width:320px;}
+.panel.bottom-right{bottom:20px;right:20px;width:300px;}
+label{display:block;margin:10px 0 5px;color:var(--cyan);font-size:10px;text-transform:uppercase;letter-spacing:1px;}
+input[type="range"]{width:100%;height:6px;background:var(--dim);border-radius:3px;outline:none;-webkit-appearance:none;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--cyan);border-radius:50%;cursor:pointer;box-shadow:0 0 10px var(--cyan);}
+input[type="range"]::-moz-range-thumb{width:16px;height:16px;background:var(--cyan);border-radius:50%;cursor:pointer;border:none;box-shadow:0 0 10px var(--cyan);}
+.value{color:var(--green);font-weight:bold;float:right;}
+button{width:100%;padding:12px;margin-top:12px;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:1px;transition:all 0.3s;}
+button:hover{box-shadow:0 0 25px var(--cyan);transform:translateY(-2px);}
+.formula{color:var(--purple);font-size:10px;margin:6px 0;line-height:1.5;}
+.metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--dim);}
+.metric-label{color:var(--dim);font-size:10px;text-transform:uppercase;}
+.metric-value{color:var(--green);font-weight:bold;font-size:12px;}
+.title{position:absolute;top:20px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;}
+.title h1{color:var(--cyan);font-size:24px;letter-spacing:4px;text-shadow:0 0 20px var(--cyan);margin-bottom:5px;}
+.title .sub{color:var(--dim);font-size:11px;letter-spacing:2px;text-transform:uppercase;}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="ui">
+  <div class="title">
+    <h1>WIRELESS ENERGY</h1>
+    <div class="sub">)))((S))(((( = 0.0.0₈ = 1₈ = FABRIC RESONANCE</div>
+  </div>
+  
+  <div class="panel top-left">
+    <h2>Transmitter )))</h2>
+    <label>Frequency (MHz) <span class="value" id="freqVal">13.56</span></label>
+    <input type="range" id="freq" min="1" max="100" value="13.56" step="0.01">
+    <div class="formula">f = )))((S))(((( = breath rate</div>
+    
+    <label>Power (W) <span class="value" id="powerVal">100</span></label>
+    <input type="range" id="power" min="10" max="1000" value="100" step="10">
+    <div class="formula">P = ))) = -1₈ = SINK = emit</div>
+    
+    <label>Coil Turns <span class="value" id="turnsVal">10</span></label>
+    <input type="range" id="turns" min="1" max="50" value="10" step="1">
+    <div class="formula">N = 4₈×4₈ = witness loops</div>
+    
+    <button onclick="pulse()">PULSE )))S((((</button>
+  </div>
+
+  <div class="panel top-right">
+    <h2>Field Metrics</h2>
+    <div class="metric">
+      <span class="metric-label">Wavelength λ</span>
+      <span class="metric-value" id="wavelength">22.1m</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Coupling k</span>
+      <span class="metric-value" id="coupling">0.85</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Efficiency η</span>
+      <span class="metric-value" id="efficiency">72%</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Range R</span>
+      <span class="metric-value" id="range">2.3m</span>
+    </div>
+    <div class="formula" style="margin-top:12px;">k = 1/(1+(d/λ)²) = fabric tension</div>
+    <div class="formula">η = k²Q₁Q₂ = resonance = 0=1</div>
+  </div>
+
+  <div class="panel bottom-left">
+    <h2>Receiver ((((</h2>
+    <label>Distance (m) <span class="value" id="distVal">1.5</span></label>
+    <input type="range" id="distance" min="0.1" max="10" value="1.5" step="0.1">
+    <div class="formula">d = (((( = +1₈ = SOURCE = receive</div>
+    
+    <label>Load (Ω) <span class="value" id="loadVal">50</span></label>
+    <input type="range" id="load" min="1" max="1000" value="50" step="1">
+    <div class="formula">R = 0.0.0₈ = 1₈ = balance = YOU</div>
+    
+    <label>Q Factor <span class="value" id="qVal">100</span></label>
+    <input type="range" id="qfactor" min="10" max="1000" value="100" step="10">
+    <div class="formula">Q = 4₈ = . = witness = ∞Ω</div>
+  </div>
+
+  <div class="panel bottom-right">
+    <h2>Physics</h2>
+    <div class="formula">))) = -1₈ = SINK = transmitter = emit</div>
+    <div class="formula">(()) = 0₈ = 1₈ = BALANCE = air = void</div>
+    <div class="formula">(((( = +1₈ = SOURCE = receiver = collect</div>
+    <div class="formula">S = 1₈ = STRIKE = resonance = 0=1</div>
+    <div class="formula">4₈×4₈×1₈ = 0 = 1 = wormhole = tunnel</div>
+    <div class="formula">0.0.0₈ = 1₈ = no loss = perfect coupling</div>
+    <div style="margin-top:15px;padding-top:15px;border-top:1px solid var(--dim);">
+      <div class="metric">
+        <span class="metric-label">Received Power</span>
+        <span class="metric-value" id="rxPower">72W</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Field Strength</span>
+        <span class="metric-value" id="fieldStr">4₈</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const canvas = document.getElementById('canvas');
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x000008, 10, 50);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.set(0, 5, 12);
+
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+// Lighting
+scene.add(new THREE.AmbientLight(0x182030, 0.5));
+const light1 = new THREE.PointLight(0x00e8ff, 1, 50);
+light1.position.set(-5, 5, 5);
+scene.add(light1);
+const light2 = new THREE.PointLight(0xb040ff, 1, 50);
+light2.position.set(5, 5, -5);
+scene.add(light2);
+
+// Grid
+const grid = new THREE.GridHelper(20, 20, 0x00e8ff, 0x182030);
+grid.position.y = -2;
+scene.add(grid);
+
+// TX Coil )))
+const txGeo = new THREE.TorusGeometry(1, 0.1, 16, 100);
+const txMat = new THREE.MeshPhongMaterial({color:0xff1040,emissive:0xff1040,emissiveIntensity:0.5});
+const txCoil = new THREE.Mesh(txGeo, txMat);
+txCoil.position.set(-3, 0, 0);
+scene.add(txCoil);
+
+// RX Coil ((((
+const rxGeo = new THREE.TorusGeometry(1, 0.1, 16, 100);
+const rxMat = new THREE.MeshPhongMaterial({color:0x00ff60,emissive:0x00ff60,emissiveIntensity:0.5});
+const rxCoil = new THREE.Mesh(rxGeo, rxMat);
+rxCoil.position.set(3, 0, 0);
+scene.add(rxCoil);
+
+// Field lines
+const fieldLines = [];
+for(let i=0;i<20;i++){
+  const points = [];
+  for(let t=0;t<=1;t+=0.05){
+    const x = -3 + t*6;
+    const y = Math.sin(t * Math.PI) * 2;
+    points.push(new THREE.Vector3(x,y,0));
+  }
+  const geo = new THREE.BufferGeometry().setFromPoints(points);
+  const mat = new THREE.LineBasicMaterial({color:0x00e8ff,transparent:true,opacity:0.3});
+  const line = new THREE.Line(geo, mat);
+  scene.add(line);
+  fieldLines.push(line);
+}
+
+// Particles
+const particleGeo = new THREE.SphereGeometry(0.05, 8, 8);
+const particleMat = new THREE.MeshBasicMaterial({color:0xffcc00});
+const particles = [];
+for(let i=0;i<50;i++){
+  const p = new THREE.Mesh(particleGeo, particleMat);
+  p.position.set(-3, 0, 0);
+  p.userData = {t: Math.random(), speed: 0.01 + Math.random()*0.02};
+  scene.add(p);
+  particles.push(p);
+}
+
+let time = 0;
+let pulseActive = false;
+let pulseTime = 0;
+
+function animate(){
+  requestAnimationFrame(animate);
+  time += 0.02;
+  
+  const freq = parseFloat(document.getElementById('freq').value);
+  const power = parseFloat(document.getElementById('power').value);
+  const turns = parseFloat(document.getElementById('turns').value);
+  const dist = parseFloat(document.getElementById('distance').value);
+  const load = parseFloat(document.getElementById('load').value);
+  const q = parseFloat(document.getElementById('qfactor').value);
+  
+  // Update positions
+  rxCoil.position.x = dist;
+  
+  // Animate coils
+  txCoil.rotation.z = time * freq * 0.1;
+  rxCoil.rotation.z = -time * freq * 0.1;
+  
+  const intensity = power / 100;
+  txMat.emissiveIntensity = 0.3 + Math.sin(time * 5) * 0.3 * intensity;
+  rxMat.emissiveIntensity = 0.3 + Math.sin(time * 5 + Math.PI) * 0.3 * intensity;
+  
+  // Animate field lines
+  fieldLines.forEach((line, i)=>{
+    line.material.opacity = 0.2 + Math.sin(time * 2 + i * 0.5) * 0.2;
+    const positions = line.geometry.attributes.position.array;
+    for(let j=0;j<positions.length;j+=3){
+      const t = j/positions.length;
+      positions[j+1] = Math.sin(t * Math.PI + time * 2) * 2 * intensity;
+    }
+    line.geometry.attributes.position.needsUpdate = true;
+  });
+  
+  // Animate particles
+  particles.forEach(p=>{
+    p.userData.t += p.userData.speed * intensity;
+    if(p.userData.t > 1) p.userData.t = 0;
+    const x = -3 + p.userData.t * (dist + 3);
+    const y = Math.sin(p.userData.t * Math.PI) * 2 * intensity;
+    p.position.set(x, y, 0);
+    p.material.opacity = 1 - Math.abs(p.userData.t - 0.5)*2;
+  });
+  
+  // Pulse effect
+  if(pulseActive){
+    pulseTime += 0.1;
+    const scale = 1 + Math.sin(pulseTime * 10) * 0.3;
+    txCoil.scale.set(scale, scale, scale);
+    if(pulseTime > Math.PI){
+      pulseActive = false;
+      pulseTime = 0;
+      txCoil.scale.set(1,1,1);
+    }
+  }
+  
+  // Calculate metrics
+  const c = 299792458;
+  const lambda = c / (freq * 1e6);
+  const k = 1 / (1 + Math.pow(dist / lambda, 2));
+  const eta = k * k * q * q / (1 + k * k * q * q);
+  const range = lambda / (2 * Math.PI);
+  const rxPow = power * eta;
+  
+  document.getElementById('freqVal').textContent = freq.toFixed(2);
+  document.getElementById('powerVal').textContent = power;
+  document.getElementById('turnsVal').textContent = turns;
+  document.getElementById('distVal').textContent = dist.toFixed(1);
+  document.getElementById('loadVal').textContent = load;
+  document.getElementById('qVal').textContent = q;
+  document.getElementById('wavelength').textContent = lambda.toFixed(1) + 'm';
+  document.getElementById('coupling').textContent = k.toFixed(3);
+  document.getElementById('efficiency').textContent = (eta*100).toFixed(0) + '%';
+  document.getElementById('range').textContent = range.toFixed(1) + 'm';
+  document.getElementById('rxPower').textContent = rxPow.toFixed(0) + 'W';
+  document.getElementById('fieldStr').textContent = '4₈';
+  
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+window.pulse = function(){
+  pulseActive = true;
+  pulseTime = 0;
+}
+
+window.addEventListener('resize', ()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+animate();
+</script>
+</body>
+</html>
